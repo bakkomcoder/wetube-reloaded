@@ -1,0 +1,45 @@
+//- //- home.pug가 base.pug가 되는거야
+//- extends base.pug
+
+//- block content 
+//-     h1 Home
+//- //- block head
+//- //-     title Home | Wetube
+
+//- //- 우리는 단순히 복사하는 게 아니라 연장하고 싶어. 
+//- //- 좋은 부분을 이용하고 싶지만, 거기에 우리만의 부분도 추가하고 싶어.
+//- //- block은 우리가 확장한 파일과 커뮤니케이션 하게 해줘.
+//- //- base.pug에서는 block을 정의해. base.pug에서 확장할 때 우리는 block 빈 블록 안에 content를 정의해.
+
+//- //iterations
+//- extends base.pug
+
+//- block content 
+//-     h2 Welcome here you will see the trending videos
+//-     ul 
+//-         each video in videos
+//-             li=video
+//-         else 
+//-             li Sorry Nothing found.
+
+//- //- mixin
+//- extends base
+//- include mixins/video 
+
+//- block content 
+//-     h2 Welcome here you will see the trending videos
+//-     //- list의 모든 element들을 HTML에 보여주고 있다.(iteration)
+//-     each potato in videos
+//-         +video(potato)
+//-     else
+//-         li Sorry nothing found.
+//-         //- mixin을 사용하고 싶다면 +를 붙여줘야 해. (base.pug) 반면 footer에는 안 붙였다. 단순히 HTML이니까!
+
+extends base
+include mixins/video 
+
+block content 
+    each potato in videos
+        +video(potato)
+    else
+        li Sorry nothing found.

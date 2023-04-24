@@ -1,0 +1,23 @@
+extends base
+
+//- block head
+//-     title Watch | Wetube
+
+block content
+    video(src="/" + video.fileUrl, controls)
+    div
+        p=video.description
+        small=video.createdAt
+        //- small=video.owner
+        //- small=loggedInUser._id
+    div 
+        small Uploaded by 
+            a(href=`/users/${video.owner._id}`)=video.owner.name
+        //- small Uploaded by #{video.owner.name}
+        //- 객체 전체를 불러왔을 때 방법(위), string으로 id 하나만 확인한 방법(아래)
+        //- small Uploaded by #{owner.name}
+    //- if String(video.owner) === String(loggedInUser._id) // string으로 id 하나만 가져옴
+    if String(video.owner._id) === String(loggedInUser._id) 
+        a(href=`${video.id}/edit`) Edit Video &rarr;
+        br
+        a(href=`${video.id}/delete`) Delete Video &rarr;
