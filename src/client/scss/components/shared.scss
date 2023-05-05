@@ -1,3 +1,9 @@
 .empty__message {
   margin-top: 50px;
+  font-size: 18px;
+}
+.video-grid {
+  display: grid;
+  gap: 50px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
