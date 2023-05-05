@@ -46,8 +46,6 @@ html(lang="ko")
                             a(href="users/edit") Edit Profile
                         li 
                             a(href="/users/logout") Log Out 
-                        //- li 
-                            //- a(href="/my-profile") #{loggedInUser.name}의 profile
                     else                       
                         li 
                             a(href="/join") Join
@@ -58,5 +56,4 @@ html(lang="ko")
         main
             block content
     include partials/footer
-    //- 반면 footer에는 안 붙였다. 단순히 HTML이니까!
-    //- if (loggedIn = true) -> ... / else (loggedIn = false) ...
+    script(src="/static/js/main.js")
