@@ -1,35 +1,9 @@
-//- doctype html
-//- html(lang="ko")
-//-     head
-//-         //- block head
-//-         //- block이란 문 또는 창문을 가지게 되어서 거기에 컨텐츠를 넣을 수 있다. 
-//-         //- (1) variable과 text 같이 쓰고 싶을 때
-//-         title #{pageTitle} | Wetube
-//-         link(rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css")
-//-     body
-//-         header 
-//-             if fakeUser.loggedIn
-//-                 small Hello #{fakeUser.username}
-//-             nav 
-//-                 ul 
-//-                     if fakeUser.loggedIn
-//-                         li 
-//-                             a(href="/logout") Log out
-//-                     else
-//-                         li
-//-                             a(href="/login") Log in
-//-             h1=pageTitle
-//-             //- (2) variable만 쓰고 싶을 때
-//-             //- (3) h1 pageTitle =====> text만 쓴 거임
-//-         main
-//-             block content
-//-     include partials/footer.pug
-
 doctype html
 html(lang="ko")
     head
         title #{pageTitle} | #{siteName}
         link(rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css")
+        link(rel="stylesheet" href="/static/css/styles.css")
     body
         header
             h1=pageTitle
