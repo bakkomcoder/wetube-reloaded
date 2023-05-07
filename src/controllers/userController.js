@@ -253,76 +253,50 @@ export const getEdit = (req, res) => {
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
 export const postEdit = async (req, res) => {
-  // const {
-  //   user: { id },
-  // } = req.session; // 아래 코드랑 동일함.
   const {
     session: {
-      user: { _id, avatarUrl }, // (3.23목) edit_profile 템플릿이 있는 세션에서 입력된 user는 avatarUrl을 가져서
+      user: { _id, avatarUrl },
     },
     body: { name, email, username, location },
     file,
-  } = req; // ES6 : req 안에 있는 session에서 user의 id를 얻었지.
-  console.log(file); // (3.23목) multer로 생성한 미들웨어는 req.file의 file을 만들어.
-  const exists = await User.exists({
-    $or: [{ username }, { email }],
-  });
-  if (exists) {
-    return res.status(400).render("edit-profile", {
-      pageTitle: "Edit Profile",
-      errorMessage: "This username/email is already taken.",
-    });
-  }
-  // const id = req.session.user.id // 동일한 코드
-  // const { name, email, username, location } = req.body; // form으로부터 받고 있는 req.body
-  // user를 찾아서 업데이트
-  // 방법2. updatedUser 만들기
+  } = req;
+  // const exists = await User.exists({
+  //   $or: [{ username }, { email }],
+  // });
+  // if (exists) {
+  //   return res.status(400).render("edit-profile", {
+  //     pageTitle: "Edit Profile",
+  //     errorMessage: "This username/email is already taken.",
+  //   });
+  // }
   const updatedUser = await User.findByIdAndUpdate(
-    // 얘는 두개의 인자를 받아서, 데이터를 받아(1) 업데이트 하는 데이터(2)
     _id,
     {
-      avatarUrl: file ? file.path : avatarUrl, // (3.23목) 유저가 form으로 파일을 보낸다면 file.path를 쓰고, 존재하지 않는다면 기존 avatarUrl을 유지할거야.
-      name, // 이렇게 써도돼.
+      avatarUrl: file ? file.path : avatarUrl,
+      name,
       email,
       username,
       location,
-      // name: name,  // name이라는 곳에다가 req.body에서 찾은 name을 넣어준다.
-      // email: email,
-      // username: username,
-      // location: location,
     },
-    { new: true } // mongoose한테 가장 최근 업데이트 된 object를 원한다고 알려줌. - options(3) => 일일이 업데이트 하지 않아도 된다.
+    { new: true }
   );
   req.session.user = updatedUser;
-  // // 방법1. session을 직접 업데이트
-  // req.session.user = {
-  //   ...req.session.user, // req.session.user에 있는 걸 밖으로 빼주는 거라고 한다. 안에 있는 email, username을 덮어쓸거니까.
-  //   name,
-  //   email,
-  //   username,
-  //   location,
-  // };
-  // return res.render("edit-profile");
   return res.redirect("/users/edit");
 };
 
 export const getChangePassword = (req, res) => {
   if (req.session.user.socialOnly === true) {
-    // 1. social(깃허브) login 인지 확인하는 방법
-    return res.redirect("/"); // 맞다면 homepage로.. 깃허브 계정은 password가 없으니까!
+    return res.redirect("/");
   }
   return res.render("users/change-password", { pageTitle: "Change Password" });
-}; // 2. "edit-profile" 템플릿에서 아예 안 보이게 하는 방법도 있다.
+};
 export const postChangePassword = async (req, res) => {
-  // const { oldPassword, newPassword, oldPasswordConfirmation } = req.body;
-  // session에서 현재 로그인된 사용자를 확인하고, form에서 정보를 가져온다. (ES6문법)
   const {
     session: {
-      user: { _id, password }, // session에 저장되어 있는 password (form에 입력한 pw)
+      user: { _id, password },
     },
     body: { oldPassword, newPassword, newPasswordConfirmation },
   } = req;
-  // step2. 기존 비밀번호와 바꾸려는 비밀번호가 맞게 입력됐는지 확인 (bcrypt)
   const user = await User.findById(_id); // 혹은, 업데이트 한 user를 사용하는 방법도 있다.
   const ok = await bcrypt.compare(oldPassword, password); // compare(old-pw, form에 입력한 Pw)
   if (!ok) {
@@ -354,18 +328,23 @@ export const postChangePassword = async (req, res) => {
 // (3.23목) video owner & user profile
 export const see = async (req, res) => {
   const { id } = req.params; // public 공개 페이지여야 하므로 user session이 아니라 URL에서 user의 id를 가져왔다.
-  const user = await User.findById(id); // id를 가지고 User 모델에 있는 user를 찾을거야.
+  const user = await User.findById(id).populate({
+    path: "videos",
+    populate: {
+      path: "owner",
+      model: "User",
+    },
+  }); // id를 가지고 User 모델에 있는 user를 찾을거야.
   // 만약 user가 없다면
   if (!user) {
     return res.status(404).render("404", { pageTitle: "User not found." }); // status code? 브라우저가 자동적으로 username과 pw 저장하는 기능 막음
   }
   // (user profile) : watch 템플릿에서 #{owner.name} 링크 타고 들어오면 보여주는 화면. 비디오가 있어야겠지!
-  const videos = await Video.find({ owner: user._id }); // 영상 소유자의 'id'와 'params'의 'id'가 같은 모든 영상들을 찾음
+  // const videos = await Video.find({ owner: user._id }); // 영상 소유자의 'id'와 'params'의 'id'가 같은 모든 영상들을 찾음
   // console.log(videos);
   return res.render("users/profile", {
-    pageTitle: `${user.name} Profile`,
-    user,
-    videos, // videos array를 템플릿에 보냄. (user profile 정리) user와 owner의 id가 같은 'video'들을 찾고 있어. 이것만 해도 충분히 대단해. template(render 하고 있는 /users/profile.pug 파일)로 videos를 보낼 수 있다는거니까!
+    pageTitle: user.name,
+    user, // videos array를 템플릿에 보냄. (user profile 정리) user와 owner의 id가 같은 'video'들을 찾고 있어. 이것만 해도 충분히 대단해. template(render 하고 있는 /users/profile.pug 파일)로 videos를 보낼 수 있다는거니까!
   }); // 정보를 받아 'db'를 검색하고 'render'하는 작업은 이제 거의 다 끝났어!
 }; // 이 video를 어떻게 user와 연결시킬 수 있을까?
 

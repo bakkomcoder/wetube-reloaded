@@ -1,5 +1,5 @@
 .empty__message {
-  margin-top: 50px;
+  margin-bottom: 50px;
   font-size: 18px;
 }
 .video-grid {
@@ -13,4 +13,10 @@
   a {
     text-decoration: underline;
   }
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
 }

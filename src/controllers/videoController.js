@@ -58,15 +58,13 @@ export const postUpload = async (req, res) => {
   const { path: fileUrl } = req.file;
   const { title, description, hashtags } = req.body;
   try {
-    await Video.create({
+    const newVideo = await Video.create({
       title,
       description,
-      // fileUrl: path // (3.23목) file 안에 path가 있어. // 하지만 아직 Video 안에 fileUrl을 만들지 않았어.
       fileUrl,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
-    // (3.24금) video 업로드 할 때마다 array에 넣어서
     const user = await User.findById(_id);
     user.videos.push(newVideo._id);
     user.save();
