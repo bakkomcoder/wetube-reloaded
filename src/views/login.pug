@@ -8,13 +8,7 @@ block content
         input(placeholder="Username", name="username", type="text", required)
         input(placeholder="Password", name="password", type="password", required)
         input(type="submit", value="Login")
-        br
-        a(href="/users/github/start") Continue with Github &rarr;
-    hr
-    div 
+        include partials/social-login
+    div.auth-switch
         span Don't have an account? 
         a(href="/join") Create one now &rarr;
-
-//- a(href="https://github.com/login/oauth/authorize?client_id=1dd9a4c62bb67bfc4c9f&allow_signup=false&scope=user:email") Continue with Github &rarr;
-//- form 기존 유저
-//- span 신규 유저
