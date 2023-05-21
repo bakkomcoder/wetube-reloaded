@@ -9,16 +9,47 @@ let videoFile;
 const handleDownload = async () => {
   const ffmpeg = createFFmpeg({ log: true });
   await ffmpeg.load();
-  // create file
   ffmpeg.FS("writeFile", "recording.webm", await fetchFile(videoFile));
-  // transcode file : 초당 60프레임 mp4 형식으로 인코딩
   await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4");
+
+  await ffmpeg.run(
+    "-i",
+    "recording.webm",
+    "-ss",
+    "00:00:01",
+    "-frames:v",
+    "1",
+    "thumbnail.jpg"
+  );
+
+  const mp4File = ffmpeg.FS("readFile", "output.mp4");
+  const thumbFile = ffmpeg.FS("readFile", "thumbnail.jpg");
+
+  const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" });
+  const thumbBlob = new Blob([thumbFile.buffer], { type: "image/jpg" });
+
+  const mp4Url = URL.createObjectURL(mp4Blob);
+  const thumbUrl = URL.createObjectURL(thumbBlob);
 
   const a = document.createElement("a");
   a.href = videoFile;
   a.download = "MyRecording.webm";
   document.body.appendChild(a);
   a.click();
+
+  const thumbA = document.createElement("a");
+  thumbA.href = thumbUrl;
+  thumbA.download = "MyThumbnail.jpg";
+  document.body.appendChild(thumbA);
+  thumbA.click();
+
+  ffmpeg.FS("unlink", "recording.webm");
+  ffmpeg.FS("unlink", "output.mp4");
+  ffmpeg.FS("unlink", "thumbnail.jpg");
+
+  URL.revokeObjectURL(mp4Url);
+  URL.revokeObjectURL(thumbUrl);
+  URL.revokeObjectURL(videoFile);
 };
 
 const handleStop = () => {
