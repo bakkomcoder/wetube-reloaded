@@ -20,6 +20,9 @@ export const watch = async (req, res) => {
 
 export const getEdit = async (req, res) => {
   const { id } = req.params;
+  const {
+    user: { _id },
+  } = req.session;
   const video = await Video.findById(id);
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
@@ -28,9 +31,12 @@ export const getEdit = async (req, res) => {
 };
 
 export const postEdit = async (req, res) => {
+  const {
+    user: { _id },
+  } = req.session;
   const { id } = req.params;
   const { title, description, hashtags } = req.body;
-  const video = await Video.exist({ _id: id });
+  const video = await Video.exists({ _id: id });
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   }
