@@ -5,6 +5,8 @@ const volumeRange = document.getElementById("volume");
 const currentTime = document.getElementById("currentTime");
 const totalTime = document.getElementById("totalTime");
 const timeline = document.getElementById("timeline");
+const fullScreenBtn = document.getElementById("fullScreen");
+const videoContainer = document.getElementById("videoContainer");
 
 let volumeValue = 0.5;
 video.volume = volumeValue;
@@ -15,7 +17,7 @@ const handlePlayClick = () => {
   } else {
     video.pause();
   }
-  playBtn.innerText = video.paused ? "Play" : "Pause";
+  playBtn.innerText = video.paused ? "플레이" : "정지";
 };
 
 const handleMuteClick = () => {
@@ -24,7 +26,7 @@ const handleMuteClick = () => {
   } else {
     video.muted = true;
   }
-  muteBtn.innerText = video.muted ? "Unmute" : "Mute";
+  muteBtn.innerText = video.muted ? "음소거 해제" : "음소거";
   volumeRange.value = video.muted ? 0 : volumeValue;
 };
 
@@ -60,9 +62,22 @@ const handleTimelineChange = (event) => {
   video.currentTime = value;
 };
 
+const handleFullscreen = () => {
+  const fullscreen = document.fullscreenElement;
+  // console.log(fullscreen); // 전체화면 아닐 때 null, 전체화면 일 때 div#videoContainer 요소 반환
+  if (fullscreen) {
+    document.exitFullscreen();
+    fullScreenBtn.innerText = "전체화면";
+  } else {
+    videoContainer.requestFullscreen();
+    fullScreenBtn.innerText = "전체화면 나가기";
+  }
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadeddata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
 timeline.addEventListener("input", handleTimelineChange);
+fullScreenBtn.addEventListener("click", handleFullscreen);
