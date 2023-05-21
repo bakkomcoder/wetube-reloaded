@@ -10,11 +10,8 @@ export const home = async (req, res) => {
 
 export const watch = async (req, res) => {
   const { id } = req.params;
-  // (3.23목) populate("owner")를 사용하면 'owner object' 전체가 불려진다!!!!!
   const video = await Video.findById(id).populate("owner");
-  // 방법1. video.owner와 loggedInUser._id는 같다. owner를 watch template으로 보내주자.
-  // const video = await Video.findById(id);
-  const owner = await User.findById(video.owner); // video를 찾고 owner를 찾아.
+  const owner = await User.findById(video.owner);
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
   }
@@ -50,18 +47,17 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
-  // (3.23목)
   const {
     user: { _id },
   } = req.session;
-  // const {path} = req.file // (3.23목) multer는 req.file을 제공해주는데
-  const { path: fileUrl } = req.file;
+  const { video, thumb } = req.files;
   const { title, description, hashtags } = req.body;
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl,
+      fileUrl: video[0].path,
+      thumbUrl: thumb[0].path,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });

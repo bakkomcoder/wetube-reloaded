@@ -26,20 +26,6 @@ videoRouter
   .route("/upload")
   .all(protectorMiddleware)
   .get(getUpload)
-  .post(videoUpload.single("video"), postUpload);
+  .post(videoUpload.fields([{ name: "video" }, { name: "thumb" }]), postUpload);
 
 export default videoRouter;
-
-// import express from "express";
-// import { watch, edit } from "../controllers/videoController";
-
-// const videoRouter = express.Router();
-
-// // const handleHome = (req, res) => res.send("Watch Video");
-// // const handleEdit = (req, res) => res.send("Edit Video");
-
-// // "/watch", "/edit"는 "/vidoes"라는 공통의 시작부분을 가져.
-// videoRouter.get("/watch", watch);
-// videoRouter.get("/edit", edit);
-
-// export default videoRouter;
