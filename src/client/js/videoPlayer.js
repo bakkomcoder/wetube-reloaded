@@ -10,6 +10,7 @@ const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
 
 let controlsTimeout = null;
+let controlsMovementTimeout = null;
 let volumeValue = 0.5;
 video.volume = volumeValue;
 
@@ -76,20 +77,27 @@ const handleFullscreen = () => {
   }
 };
 
+const hideControls = () => videoControls.classList.remove("showing");
+
 const handleMouseMove = () => {
+  // (3) 사용자가 비디오에 들어왔다 떠나서 다시 들어올 때 발생 => controlsTimeout이 number가 되서 Timeout을 취소할 수 있게 되었다.
   if (controlsTimeout) {
-    // handleMouseLeave() 이후 controlsTimeout(id)를 부여받은 상태라면 true를 반환
     clearTimeout(controlsTimeout);
     controlsTimeout = null;
   }
+  // (5) (취소) 사용자의 마우스가 움직이지 않는 것을 파악 -> 움직일 때 Timeout 취소
+  if (controlsMovementTimeout) {
+    clearTimeout(controlsMovementTimeout);
+    controlsMovementTimeout = null;
+  }
+  // (1) 처음 사용자가 비디오에 들어왔을 때 -> 3초 기다렸다가 컨트롤러 삭제
   videoControls.classList.add("showing");
+  controlsMovementTimeout = setTimeout(hideControls, 3000); // (4) (생성) 사용자가 움직임을 멈추면 취소할 수 없는 Timeout을 만든다
 };
 
 const handleMouseLeave = () => {
-  controlsTimeout = setTimeout(() => {
-    videoControls.classList.remove("showing");
-  }, 3000);
-  // console.log(controlsTimeout);
+  // (2) 사용자가 비디오를 떠나면 컨트롤을 숨겨주는 timeout 생성 (controlsTimeout이 null에서 numbers로 변환됌)
+  controlsTimeout = setTimeout(hideControls, 3000);
 };
 
 playBtn.addEventListener("click", handlePlayClick);
