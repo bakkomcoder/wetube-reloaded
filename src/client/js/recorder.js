@@ -1,3 +1,4 @@
+import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 const startBtn = document.getElementById("startBtn");
 const video = document.getElementById("preview");
 
@@ -5,8 +6,14 @@ let stream;
 let recorder;
 let videoFile;
 
-// 파일의 링크를 다운로드
-const handleDownload = () => {
+const handleDownload = async () => {
+  const ffmpeg = createFFmpeg({ log: true });
+  await ffmpeg.load();
+  // create file
+  ffmpeg.FS("writeFile", "recording.webm", await fetchFile(videoFile));
+  // transcode file : 초당 60프레임 mp4 형식으로 인코딩
+  await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4");
+
   const a = document.createElement("a");
   a.href = videoFile;
   a.download = "MyRecording.webm";
@@ -26,11 +33,8 @@ const handleStart = () => {
   startBtn.removeEventListener("click", handleStart);
   startBtn.addEventListener("click", handleStop);
   recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
-  // ondataavailable : MediaRecorder가 media data를 어플리케이션에 전달할 때 주는 것
-  // data는 Blob object로 준다.
   recorder.ondataavailable = (event) => {
     videoFile = URL.createObjectURL(event.data);
-    console.log(videoFile);
     video.srcObject = null;
     video.src = videoFile;
     video.loop = true;
