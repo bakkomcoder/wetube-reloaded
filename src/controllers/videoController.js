@@ -97,3 +97,9 @@ export const search = async (req, res) => {
   }
   res.render("search", { pageTitle: "Search", videos });
 };
+
+export const createComment = (req, res) => {
+  console.log(req.params);
+  console.log(req.body);
+  return res.end();
+};
