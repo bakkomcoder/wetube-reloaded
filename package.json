@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "The best way to watch videos.",
   "scripts": {
+    "start": "node build/init.js",
+    "build:server": "babel src -d build",
     "dev:server": "nodemon",
     "dev:assets": "webpack"
   },
@@ -32,7 +34,8 @@
     "pug": "^3.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.12",
+    "@babel/cli": "^7.21.5",
+    "@babel/core": "^7.22.1",
     "@babel/node": "^7.20.7",
     "@babel/preset-env": "^7.20.2",
     "babel-loader": "^9.1.2",
