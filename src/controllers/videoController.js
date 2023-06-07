@@ -108,11 +108,11 @@ export const registerView = async (req, res) => {
   }
   video.meta.views = video.meta.views + 1;
   await video.save();
-  console.log("video success");
   return res.sendStatus(200);
 };
 
-export const test = (req, res) => {
-  console.log("success");
-  return res.redirect("/");
+export const createComment = (req, res) => {
+  console.log(req.params);
+  console.log(req.body);
+  return res.end();
 };

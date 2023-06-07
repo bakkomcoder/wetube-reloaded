@@ -13,7 +13,7 @@ const videoSchema = new mongoose.Schema({
   },
   comments: [
     { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Comment" },
-  ],
+  ], // 비디오에는 여러 개의 댓글이 달림 (배열)
   owner: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
 });
 
