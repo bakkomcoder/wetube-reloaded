@@ -6,13 +6,17 @@ const handleSubmit = (e) => {
   const textarea = form.querySelector("textarea");
   const text = textarea.value;
   const videoId = videoContainer.dataset.id;
-  console.log(videoId);
-  console.log(text);
+  if (text === "") {
+    return;
+  }
   fetch(`/api/videos/${videoId}/comment`, {
     method: "post",
-    body: { text },
+    // header에 request 정보 담음. express에게 json을 보내고 있다고 알려줌
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ text }), // request를 보내기 전 프론트에서 string으로 받아 JS object로 변환
   });
-  console.log("fetch");
 };
 
 if (form) {

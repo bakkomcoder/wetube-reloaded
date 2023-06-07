@@ -20,8 +20,8 @@ app.set("views", process.cwd() + "/src/views");
 //   next();
 // });
 app.use(logger);
-app.use(express.urlencoded({ extended: true })); // req.body로부터 값 불러올 수 있도록 함
-app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // (commentSection.js) 댓글 text를 string으로 받아 JS object로 돌려줌
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,
