@@ -1,4 +1,5 @@
 import Video from "../models/Video";
+import Comment from "../models/Comment";
 import User from "../models/User";
 
 export const home = async (req, res) => {
@@ -10,7 +11,8 @@ export const home = async (req, res) => {
 
 export const watch = async (req, res) => {
   const { id } = req.params;
-  const video = await Video.findById(id).populate("owner").populate("comments");
+  const video = await Video.findById(id).populate("owner").populate("comments"); // video에 comment
+  console.log(video);
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
   }
@@ -111,8 +113,26 @@ export const registerView = async (req, res) => {
   return res.sendStatus(200);
 };
 
-export const createComment = (req, res) => {
-  console.log(req.body); // { text: 'ggggggaaaaa' }
-  console.log(req.body.text); // ggggggaaaaa
-  return res.end();
+// Back
+export const createComment = async (req, res) => {
+  const {
+    session: { user },
+    body: { text },
+    params: { id },
+  } = req;
+  // console.log(user, text, id);
+  // DB 업데이트 (Video 모델에서 검색) : id로 비디오를 찾아서, 없으면 404 에러
+  const video = await Video.findById(id);
+  if (!video) {
+    return res.sendStatus(404);
+  }
+  // DB 업데이트 (Comment 모델 만들기) : Comment 모델 만드는데 앞서 내가 찾은 파라미터와 동일하게
+  const comment = await Comment.create({
+    text,
+    owner: user._id,
+    video: id,
+  });
+  video.comments.push(comment._id);
+  video.save();
+  return res.sendStatus(201); // Created
 };

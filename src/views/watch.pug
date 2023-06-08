@@ -34,13 +34,12 @@ block content
                 textarea(cols="30", rows="10", placeholder="댓글을 남겨주세요!")
                 button 댓글
 
-    //- div.video__comments
-    //-     ul
-    //-         each comment in video.comments.reverse()
-    //-             li.video__comment
-    //-                 i.fas.fa-comment
-    //-                 span  #{comment.text}
-
+    div.video__comments
+        ul 
+            each comment in video.comments.reverse()
+                li.video__comment
+                    i.fas.fa-comment
+                    |  #{comment.text}
 
 block scripts 
     script(src="/static/js/videoPlayer.js")
