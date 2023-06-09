@@ -6,7 +6,7 @@ export const home = async (req, res) => {
   const videos = await Video.find({})
     .sort({ createdAt: "desc" })
     .populate("owner");
-  return res.render("home", { pageTitle: "Home", videos });
+  return res.render("home", { pageTitle: "홈", videos });
 };
 
 export const watch = async (req, res) => {
@@ -45,7 +45,7 @@ export const postEdit = async (req, res) => {
     description,
     hashtags: Video.formatHashtags(hashtags),
   });
-  req.flash("success", "Changes saved.");
+  req.flash("success", "변경 완료!");
   return res.redirect(`/videos/${id}`);
 };
 
@@ -71,6 +71,7 @@ export const postUpload = async (req, res) => {
     const user = await User.findById(_id);
     user.videos.push(newVideo._id);
     user.save();
+    req.flash("success", "업로드 완료!");
     return res.redirect("/");
   } catch (error) {
     return res.status(404).render("upload", {
@@ -83,6 +84,7 @@ export const postUpload = async (req, res) => {
 export const deleteVideo = async (req, res) => {
   const { id } = req.params;
   await Video.findByIdAndDelete(id);
+  req.flash("success", "삭제 완료!");
   return res.redirect("/");
 };
 

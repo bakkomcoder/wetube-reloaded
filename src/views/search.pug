@@ -3,7 +3,7 @@ include mixins/video
 
 block content 
     form(method="GET").search__form
-        input(placeholder="Search by title", type="text", name="keyword")
+        input(placeholder="검색", type="text", name="keyword")
         button 
             i.fas.fa-search
 
@@ -11,4 +11,4 @@ block content
         each video in videos 
             +video(video)
         else
-            span.empty__message No videos found
+            span.empty__message 검색어를 입력해주세요 🙂
