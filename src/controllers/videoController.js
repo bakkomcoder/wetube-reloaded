@@ -133,5 +133,21 @@ export const createComment = async (req, res) => {
   });
   video.comments.push(comment._id);
   video.save();
-  return res.sendStatus(201); // Created
+  return res.status(201).json({ newCommentId: comment._id });
+};
+
+export const deleteComment = async (req, res) => {
+  const {
+    params: { commentId, videoId },
+  } = req;
+  await Comment.findByIdAndDelete(commentId);
+  await Video.updateOne(
+    { _id: videoId },
+    {
+      $pull: {
+        comments: commentId,
+      },
+    }
+  );
+  return res.sendStatus(200);
 };
