@@ -1,5 +1,4 @@
-//- 가입 페이지
-extends base
+extends ../base
 
 block content 
     if errorMessage 
@@ -10,7 +9,7 @@ block content
         input(placeholder="비밀번호", name="password", type="password", required)
         input(placeholder="비밀번호 확인", name="password2", type="password", required)
         input(type="submit", value="회원가입")
-        include partials/social-login
+        include ../partials/social-login
     div.auth-switch
         span 이미 계정이 있나요? 
         a(href="/login") 로그인 &rarr;

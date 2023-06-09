@@ -1,4 +1,4 @@
-extends base
+extends ../base
 
 block content
     div#videoContainer(data-id=video._id)
@@ -20,30 +20,18 @@ block content
                     i.fas.fa-expand
     div.video__data
         p.video__title=video.title
-        small.video__owner Uploaded by 
-            a(href=`/users/${video.owner._id}`)=video.owner.username
-        small.video__createdAt=new Date(video.createdAt).toLocaleDateString("ko-kr", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
+        small.video__owner 
+            a(href=`/users/${video.owner._id}`)
+                img.video__owner-avatar(src="/"+ video.owner.avatarUrl)
+            div.video__data-sub
+                a(href=`/users/${video.owner._id}`)=video.owner.username
+                small.video__createdAt=new Date(video.createdAt).toLocaleDateString("ko-kr", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
+                
         if String(video.owner._id) === String(loggedInUser._id) 
             a(href=`${video.id}/edit`) 비디오 수정 &rarr;
             br
             a(href=`${video.id}/delete`) 비디오 삭제 &rarr;
-
-    if loggedIn
-        div.video__comments
-            form.video__comment-form#commentForm
-                textarea(cols="30", rows="10", placeholder="댓글을 남겨주세요!")
-                button 댓글 추가
-
-    div.video__comments
-        ul 
-            each comment in video.comments.reverse()
-                li.video__comment(data-id=comment.id)
-                    i.fas.fa-comment
-                    span  #{comment.text}
-                    if (String(video.owner._id) === String(loggedInUser._id)) || (String(comment.owner._id) === String(loggedInUser._id))
-                        span.delete-btn  ❌
+    include ../partials/comment
 
 block scripts 
     script(src="/static/js/videoPlayer.js")
-    if loggedIn
-        script(src="/static/js/commentSection.js") 

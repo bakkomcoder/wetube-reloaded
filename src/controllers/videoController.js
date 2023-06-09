@@ -11,11 +11,17 @@ export const home = async (req, res) => {
 
 export const watch = async (req, res) => {
   const { id } = req.params;
-  const video = await Video.findById(id).populate("owner").populate("comments"); // video에 comment
+  const video = await Video.findById(id)
+    .populate("owner")
+    .populate({
+      path: "comments",
+      populate: { path: "owner" },
+    });
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
   }
-  return res.render("watch", { pageTitle: video.title, video });
+  console.log("comment owner", video.comments);
+  return res.render("video/watch", { pageTitle: video.title, video });
 };
 
 export const getEdit = async (req, res) => {
@@ -27,7 +33,7 @@ export const getEdit = async (req, res) => {
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
   }
-  return res.render("edit", { pageTitle: `Edit: ${video.title}`, video });
+  return res.render("video/edit", { pageTitle: `Edit: ${video.title}`, video });
 };
 
 export const postEdit = async (req, res) => {
@@ -50,7 +56,7 @@ export const postEdit = async (req, res) => {
 };
 
 export const getUpload = (req, res) => {
-  return res.render("upload", { pageTitle: "Upload Video" });
+  return res.render("video/upload", { pageTitle: "Upload Video" });
 };
 
 export const postUpload = async (req, res) => {
@@ -98,7 +104,7 @@ export const search = async (req, res) => {
       },
     }).populate("owner");
   }
-  res.render("search", { pageTitle: "Search", videos });
+  res.render("video/search", { pageTitle: "Search", videos });
 };
 
 export const registerView = async (req, res) => {

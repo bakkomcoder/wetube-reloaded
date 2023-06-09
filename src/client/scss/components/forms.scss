@@ -1,7 +1,7 @@
 form {
   max-width: 420px;
   margin: 0 auto;
-  &:not(.search__form) {
+  &:not(.search__form, .video__comment-form) {
     padding: 30px;
     background-color: rgba($color: $bg, $alpha: 0.7);
     border-radius: 10px;
