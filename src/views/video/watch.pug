@@ -18,19 +18,8 @@ block content
                     i.fas.fa-volume-up
                 span#fullScreen 
                     i.fas.fa-expand
-    div.video__data
-        p.video__title=video.title
-        small.video__owner 
-            a(href=`/users/${video.owner._id}`)
-                img.video__owner-avatar(src="/"+ video.owner.avatarUrl)
-            div.video__data-sub
-                a(href=`/users/${video.owner._id}`)=video.owner.username
-                small.video__createdAt=new Date(video.createdAt).toLocaleDateString("ko-kr", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
-                
-        if String(video.owner._id) === String(loggedInUser._id) 
-            a(href=`${video.id}/edit`) 비디오 수정 &rarr;
-            br
-            a(href=`${video.id}/delete`) 비디오 삭제 &rarr;
+
+    include ../partials/video-data
     include ../partials/comment
 
 block scripts 
