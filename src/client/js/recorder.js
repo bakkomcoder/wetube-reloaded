@@ -34,6 +34,8 @@ const handleDownload = async () => {
   const mp4Url = URL.createObjectURL(mp4Blob);
   const thumbUrl = URL.createObjectURL(thumbBlob);
 
+  actionBtn.removeEventListener("click", handleDownload);
+
   const a = document.createElement("a");
   a.href = mp4Url;
   a.download = "MyRecording.mp4";
