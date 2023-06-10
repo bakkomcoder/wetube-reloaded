@@ -59,14 +59,14 @@ const handleDownload = async () => {
 };
 
 const handleStop = () => {
-  actionBtn.innerText = "Download Recording";
+  actionBtn.innerText = "녹화본 다운로드";
   actionBtn.removeEventListener("click", handleStop);
   actionBtn.addEventListener("click", handleDownload);
   recorder.stop();
 };
 
 const handleStart = () => {
-  actionBtn.innerText = "Stop Recording";
+  actionBtn.innerText = "녹화 중단하기";
   actionBtn.removeEventListener("click", handleStart);
   actionBtn.addEventListener("click", handleStop);
   recorder = new MediaRecorder(stream, { mimeType: "video/webm" });

@@ -9,19 +9,20 @@ form {
   }
 }
 
+textarea[name="description"],
 input:not(input[type="range"]),
 input[type="submit"] {
   all: unset;
   padding: 15px 20px;
   border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background-color: black;
+  border: 1px solid inherit;
+  background-color: $light;
   margin-bottom: 5px;
   font-size: 16px;
-  color: white;
+  color: black;
   width: 90%;
   &::placeholder {
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.9);
   }
 }
 
@@ -42,4 +43,35 @@ input[type="submit"],
     opacity: 0.5;
     pointer-events: none;
   }
+}
+
+.file-upload__form {
+  display: flex;
+  justify-content: space-between;
+  .file-upload__btn {
+    font-size: 16px;
+    background-color: $dark;
+    opacity: 0.8;
+    color: white;
+    padding: 15px 60px;
+    border-radius: 15px;
+  }
+  #video,
+  #thumb {
+    display: none;
+  }
+}
+
+.file-upload__btn,
+input[type="submit"] {
+  &:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+}
+
+textarea[name="description"] {
+  height: auto;
+  word-wrap: break-all; // 가로 공간 부족할 때 자동으로 줄바꿈
+  overflow-y: auto; // 세로 방향으로 오버플로우가 발생하면 스크롤바 표시
 }
