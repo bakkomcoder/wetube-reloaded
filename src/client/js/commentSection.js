@@ -30,10 +30,11 @@ const handleSubmit = async (e) => {
     return;
   }
 
-  const textarea = commentForm.querySelector("textarea");
+  const textarea = commentForm.querySelector("input");
   const text = textarea.value;
   const videoId = videoContainer.dataset.id;
   if (text === "") {
+    alert("댓글을 입력해주세요!");
     return;
   }
   const response = await fetch(`/api/videos/${videoId}/comment`, {
