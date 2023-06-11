@@ -1,21 +1,18 @@
-if loggedIn
-    div.video__comments
-        form.video__comment-form#commentForm
-            textarea(placeholder="댓글을 남겨주세요!")
-            button 댓글 추가
+//- if loggedIn
+div.video__comments
+    form.video__comment-form#commentForm(data-loggedIn=`${loggedIn}`)
+        textarea(placeholder="로그인 후 댓글을 남겨주세요!")
+        button 댓글 추가
 
 div.video__comments
     ul 
         each comment in video.comments.reverse()
             li.video__comment(data-id=comment.id)
                 a(href=`/users/${comment.owner._id}`)
-                    img.video__comment-avatar(src="/"+ video.owner.avatarUrl)
+                    img.video__comment-avatar(src="/"+ comment.owner.avatarUrl)
                 div.video__comment-col
-                    a(href=`/users/${comment.owner._id}`).video__comment-user=video.owner.username
+                    a(href=`/users/${comment.owner._id}`).video__comment-user=comment.owner.username
+                    span.video__comment-createdAt=new Date(comment.createdAt).toLocaleDateString("ko-kr", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
                     span.video__comment-text  #{comment.text}
                 if (String(video.owner._id) === String(loggedInUser._id)) || (String(comment.owner._id) === String(loggedInUser._id))
                     span.delete-btn  ❌
-
-block scripts 
-    if loggedIn
-        script(src="/static/js/commentSection.js") 

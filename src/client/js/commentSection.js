@@ -1,6 +1,6 @@
 // Front (watch.pug)
 const videoContainer = document.getElementById("videoContainer");
-const form = document.getElementById("commentForm");
+const commentForm = document.getElementById("commentForm");
 const deleteBtns = document.querySelectorAll(".delete-btn");
 
 // const addComment = (text, id) => {
@@ -23,7 +23,14 @@ const deleteBtns = document.querySelectorAll(".delete-btn");
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-  const textarea = form.querySelector("textarea");
+
+  if (commentForm.dataset.loggedin === "false") {
+    // 사용자가 로그인하지 않은 경우
+    alert("로그인 후에만 댓글을 남길 수 있습니다.");
+    return;
+  }
+
+  const textarea = commentForm.querySelector("textarea");
   const text = textarea.value;
   const videoId = videoContainer.dataset.id;
   if (text === "") {
@@ -36,7 +43,7 @@ const handleSubmit = async (e) => {
     },
     body: JSON.stringify({ text }),
   });
-  console.log(response);
+  // console.log(response);
   if (response.status === 201) {
     textarea.value = "";
     // const newCommentId = await response.json();
@@ -45,8 +52,8 @@ const handleSubmit = async (e) => {
   }
 };
 
-if (form) {
-  form.addEventListener("submit", handleSubmit);
+if (commentForm) {
+  commentForm.addEventListener("submit", handleSubmit);
 }
 
 const handleDelete = async (e) => {
