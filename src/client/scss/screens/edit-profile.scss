@@ -4,6 +4,13 @@ form {
     margin-bottom: 10px;
     display: block;
   }
+  #avatar {
+    display: none;
+  }
+  .profile__avatar {
+    width: 65px;
+    height: 65px;
+  }
 }
 
 .edit-profile__password {

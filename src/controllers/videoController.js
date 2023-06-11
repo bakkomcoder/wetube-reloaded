@@ -20,7 +20,7 @@ export const watch = async (req, res) => {
   if (!video) {
     return res.render("404", { pageTitle: "Video not found." });
   }
-  console.log("comment owner", video.comments);
+  // console.log("comment owner", video.comments);
   return res.render("video/watch", { pageTitle: video.title, video });
 };
 
@@ -56,7 +56,7 @@ export const postEdit = async (req, res) => {
 };
 
 export const getUpload = (req, res) => {
-  return res.render("video/upload", { pageTitle: "Upload Video" });
+  return res.render("video/upload", { pageTitle: "동영상 업로드" });
 };
 
 export const postUpload = async (req, res) => {

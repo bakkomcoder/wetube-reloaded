@@ -1,8 +1,10 @@
 #videoContainer {
   width: 100%;
   position: relative;
+  color: white;
   video {
     width: 100%;
+    border-radius: 5px;
   }
   .videoControls {
     opacity: 0;

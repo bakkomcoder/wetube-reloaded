@@ -7,6 +7,8 @@ export const getJoin = (req, res) =>
   res.render("user/join", { pageTitle: "회원가입" });
 
 export const postJoin = async (req, res) => {
+  const files = ["1.png", "2.png", "3.png", "4.png", "5.png", "6.png"];
+  const randomFile = files[Math.floor(Math.random() * files.length)];
   const { username, email, password, password2 } = req.body;
   const pageTitle = "회원가입";
   if (password !== password2) {
@@ -28,7 +30,7 @@ export const postJoin = async (req, res) => {
     email,
     username,
     password,
-    avatarUrl: "static/img/defaultAvatar.png",
+    avatarUrl: `uploads/img/${randomFile}`,
   });
   req.flash("success", "회원가입 완료! 로그인 화면으로 이동합니다.");
   return res.redirect("/login");
@@ -202,7 +204,6 @@ export const see = async (req, res) => {
       model: "User",
     },
   });
-  console.log("USER", user);
   if (!user) {
     return res.status(404).render("404", { pageTitle: "사용자가 없어요 🥲" });
   }
@@ -210,4 +211,14 @@ export const see = async (req, res) => {
     pageTitle: user.username,
     user,
   });
+};
+
+export const checkLogin = (req, res) => {
+  if (req.session.loggedIn) {
+    res.status(200).send();
+    console.log("login");
+  } else {
+    res.status(401).send();
+    console.log("not login");
+  }
 };

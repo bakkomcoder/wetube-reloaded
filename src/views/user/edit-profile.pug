@@ -4,11 +4,18 @@ block content
     if errorMessage 
         span=errorMessage
     form(method="POST", enctype="multipart/form-data").edit-profile__form
-        label(for="avatar") 프로필 사진 
+        div.profile__data 
+            img(src="/" + loggedInUser.avatarUrl).avatarImg
+            div.profile-preiview
+            //- span=loggedInUser.username
+        label(for="avatar").fas.fa-image 사진 업로드
         input(type="file", id="avatar", name="avatar", accept="image/*")
-        input(placeholder="이메일", name="email", type="email", required, value=loggedInUser.email)
         input(placeholder="이름", name="username", type="text", required, value=loggedInUser.username)
+        input(placeholder="이메일", name="email", type="email", required, value=loggedInUser.email)
         input(type="submit", value="프로필 수정")
         if !loggedInUser.socialOnly
             div.edit-profile__password
                 a(href="change-password") 비밀번호 변경 &rarr;
+
+block scripts 
+    script(src="/static/js/userProfile.js")

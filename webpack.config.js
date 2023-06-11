@@ -8,7 +8,8 @@ module.exports = {
     main: BASE_JS + "main.js",
     videoPlayer: BASE_JS + "videoPlayer.js",
     recorder: BASE_JS + "recorder.js",
-    commentSection: BASE_JS + "commentSection.js", // 댓글
+    commentSection: BASE_JS + "commentSection.js",
+    userProfile: BASE_JS + "userProfile.js",
   },
   mode: "development",
   plugins: [
