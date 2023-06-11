@@ -51,7 +51,7 @@ const handleVolumeChange = (event) => {
 };
 
 const formatTime = (seconds) =>
-  new Date(seconds * 1000).toISOString().substr(14, 5);
+  new Date(seconds * 1000).toISOString().substring(11, 19);
 
 const handleLoadedMetadata = () => {
   totalTime.innerText = formatTime(Math.floor(video.duration));
@@ -72,7 +72,6 @@ const handleTimelineChange = (event) => {
 
 const handleFullscreen = () => {
   const fullscreen = document.fullscreenElement;
-  // console.log(fullscreen); // 전체화면 아닐 때 null, 전체화면 일 때 div#videoContainer 요소 반환
   if (fullscreen) {
     document.exitFullscreen();
     fullScreenIcon.classList = "fas fa-expand";
@@ -85,23 +84,19 @@ const handleFullscreen = () => {
 const hideControls = () => videoControls.classList.remove("showing");
 
 const handleMouseMove = () => {
-  // (3) 사용자가 비디오에 들어왔다 떠나서 다시 들어올 때 발생 => controlsTimeout이 number가 되서 Timeout을 취소할 수 있게 되었다.
   if (controlsTimeout) {
     clearTimeout(controlsTimeout);
     controlsTimeout = null;
   }
-  // (5) (취소) 사용자의 마우스가 움직이지 않는 것을 파악 -> 움직일 때 Timeout 취소
   if (controlsMovementTimeout) {
     clearTimeout(controlsMovementTimeout);
     controlsMovementTimeout = null;
   }
-  // (1) 처음 사용자가 비디오에 들어왔을 때 -> 3초 기다렸다가 컨트롤러 삭제
   videoControls.classList.add("showing");
-  controlsMovementTimeout = setTimeout(hideControls, 3000); // (4) (생성) 사용자가 움직임을 멈추면 취소할 수 없는 Timeout을 만든다
+  controlsMovementTimeout = setTimeout(hideControls, 3000);
 };
 
 const handleMouseLeave = () => {
-  // (2) 사용자가 비디오를 떠나면 컨트롤을 숨겨주는 timeout 생성 (controlsTimeout이 null에서 numbers로 변환됌)
   controlsTimeout = setTimeout(hideControls, 3000);
 };
 
